@@ -107,16 +107,7 @@ void loop() {
     smoke_trigger = true;
   }
  
-  
   //code for finding total no. of ppl using keypad
-  /*
-    People enter a '*' and the number of ppl exiting OR a '#' and the 
-    number of ppl entering to log it in the system
-    
-    NOTE: This does not apply after the alarm goes off, 
-    pplCount becomes static once the alarm is triggered.
-  */
-  
   char lkey = keypad.getKey();
   if (lkey != NO_KEY && ((int)lkey-48)>0){
     
@@ -139,22 +130,6 @@ void loop() {
     Serial.print(lkey);
     currentKey=lkey;
   }
-  
-
-  /*
-  Here we have two main aims:
-     1. To minimize evacuation time based on the rate that the smoke/gas spreads
-     2. To indicate an optimum no. of ppl per exit to reduce the chances 
-        of a stampede and keep the time required to a minimum without exposing 
-        ppl neer the exits to where the hazard has started to any smoke/gas.
-        
-   >> This meant that there was only a certain safe time frame in 
-      which people can use a said exit.
-      
-   >> This info was used to find out the maximum people who can exit the building
-      absoluely safely based on how far the exits are from the triggered sensor 
-      and the exit width.
-  */
   
  //static values for optimization math
   for(int i = 0; i<exitCount; i++){
@@ -195,13 +170,6 @@ void loop() {
       //^^here^^ we have some values that had crossed max, so they were reduced, 
       //therefore, now, the whole pplCount hasn't yet been accomodated.
      
-    
-    
-      /*
-      Now we try to find out the optimum exits where we can direct the 
-      rest of the ppl who couldn't be accomodated in ideal values while 
-      ensuring the least possible increase in evacuation time.
-      */
       int pplFilledWhileloop = 1;
       while (pplFilledWhileloop>0){
         pplFilledWhileloop = 0;
@@ -252,28 +220,3 @@ void loop() {
   digitalWrite(led2, LOW);
   digitalWrite(led3, LOW);
 }
-
-/*
-  Accuracy of our optimization algorithm:
-  
-  We tested our algorithm out 10-12 times with different values and compared our results 
-  with official GRG Non Linear Solver on excel that uses an advanced derivative 
-  based computing technique.
-  
-  Every time, our results came out within +- 0.6% of the GRG results, 
-  hence verifying our accuracy to a certin extent.
-  
-  Here's one of the result tables for reference. 
-  (pplCount: 800, building info same as the example in this code, sensor triggered: sensor 1)
-  
-  Exits   |   GRG Solver results   |   Our Results
-    A                0 ppl                0 ppl
-    B               80 ppl               80 ppl
-    C               90 ppl               89 ppl
-    D              180 ppl              180 ppl
-    E               90 ppl               89 ppl
-    F              360 ppl              362 ppl
-  --------------------------------------------------
-   Time:            90sec               90.5sec
-  --------------------------------------------------
-*/
