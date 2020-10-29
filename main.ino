@@ -5,7 +5,7 @@ const int exitCount = 6;
 char exitName[exitCount] = {'A', 'B', 'C', 'D', 'E', 'F'};
 int BuildingInfo[2][exitCount]= {
   {3, 2, 1, 2, 1, 4},
-  {0, 0, 0, 0, 0, 0}
+  {0, 0, 0, 0, 0, 0} 
 };
 int RateOfSpread = 1;
 int sensor1Dist[exitCount] = {0, 40, 230, 140, 200, 100};  //distance of exits from various sensors
